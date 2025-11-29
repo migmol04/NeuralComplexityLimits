@@ -1,0 +1,13 @@
+# No subir el entorno virtual
+.venv/
+
+# Basura típica de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Datos / modelos pesados (por si acaso)
+*.npy
+*.npz
+*.h5
+*.log
