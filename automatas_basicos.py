@@ -246,7 +246,7 @@ L10_paridad_par = crear_automata(trans_paridad_impar, 'par', ['par'])
 
 # L11: termina en "01"
 def L11_termina_01(entrada):
-    return 1.0 if entrada[-2:] == [0, 1] else 0.0
+    return 1.0 if tuple(entrada[-2:]) == (0, 1) else 0.0
 
 # L12: contiene la subcadena "101"
 trans_contiene_101 = {
