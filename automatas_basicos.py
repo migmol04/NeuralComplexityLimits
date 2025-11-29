@@ -98,11 +98,6 @@ import itertools
 
 
 def entrenar_red(modelo, funcion_objetivo, n_bits=21, n_muestras=500_000, epochs=10):
-    """
-    Entrena una red neuronal 'modelo' para aproximar una función
-    f: {0,1}^n_bits -> {0,1}.
-    Devuelve la accuracy sobre el conjunto de test.
-    """
     N = 2**n_bits
     bits = np.arange(n_bits, dtype=np.uint32)
 
@@ -136,13 +131,6 @@ def entrenar_red(modelo, funcion_objetivo, n_bits=21, n_muestras=500_000, epochs
 
 
 def calcular_sensibilidad(funcion, n):
-    """
-    Calcula:
-    - sensibilidad media
-    - varianza normalizada de la sensibilidad
-
-    Recorre TODAS las cadenas de {0,1}^n, así que usar n pequeño (<=12).
-    """
     total_cambios = 0
     sensibilidades = []
 
@@ -173,7 +161,6 @@ def calcular_sensibilidad(funcion, n):
 
 
 def crear_modelo_simple():
-    """Red neuronal MLP pequeña para los experimentos."""
     modelo = Sequential([
         Input(shape=(21,)),
         Dense(8, activation='relu'),
