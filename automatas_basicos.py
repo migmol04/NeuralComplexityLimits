@@ -93,9 +93,9 @@ from tensorflow.keras.layers import Input, Dense
 import itertools
 
 
-# --------------------------------------------------
+
 # 1. ENTRENAMIENTO DE LA RED NEURONAL
-# --------------------------------------------------
+
 
 def entrenar_red(modelo, funcion_objetivo, n_bits=21, n_muestras=500_000, epochs=10):
     """
@@ -131,9 +131,9 @@ def entrenar_red(modelo, funcion_objetivo, n_bits=21, n_muestras=500_000, epochs
     return accuracy_score(y_test, y_pred)
 
 
-# --------------------------------------------------
+
 # 2. MEDIDAS DE FRONTERA (SENSIBILIDAD)
-# --------------------------------------------------
+
 
 def calcular_sensibilidad(funcion, n):
     """
@@ -168,9 +168,9 @@ def calcular_sensibilidad(funcion, n):
     return sens_media, var_normalizada
 
 
-# --------------------------------------------------
+
 # 3. DEFINICIÓN DE MODELOS NEURONALES
-# --------------------------------------------------
+
 
 def crear_modelo_simple():
     """Red neuronal MLP pequeña para los experimentos."""
@@ -182,9 +182,7 @@ def crear_modelo_simple():
     return modelo
 
 
-# --------------------------------------------------
 # 4. AUTÓMATAS FINITOS (LENGUAJES REGULARES)
-# --------------------------------------------------
 
 def crear_automata(transiciones, estado_inicial, estados_aceptacion):
     estados_aceptacion = set(estados_aceptacion)
@@ -277,9 +275,9 @@ trans_contiene_101 = {
 L12_contiene_101 = crear_automata(trans_contiene_101, 'q0', ['q3'])
 
 
-# --------------------------------------------------
+
 # 5. EXPERIMENTOS Y TABLA DE RESULTADOS
-# --------------------------------------------------
+
 
 if __name__ == "__main__":
     bits_red = 21       # longitud para entrenar la red
