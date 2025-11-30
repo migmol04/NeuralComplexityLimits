@@ -87,6 +87,23 @@ def crear_modelo_simple():
     ])
     return modelo
 
+def crear_modelo_lineal():
+    modelo = Sequential([
+        Input(shape=(21,)),
+        Dense(1, activation='sigmoid')
+    ])
+    return modelo
+
+
+def crear_modelo_grande():
+    modelo = Sequential([
+        Input(shape=(21,)),
+        Dense(64, activation='relu'),
+        Dense(64, activation='relu'),
+        Dense(32, activation='relu'),
+        Dense(1, activation='sigmoid')
+    ])
+    return modelo
 
 # 4. AUTÓMATAS FINITOS (LENGUAJES REGULARES)
 
@@ -186,64 +203,59 @@ L12_contiene_101 = crear_automata(trans_contiene_101, 'q0', ['q3'])
 
 
 if __name__ == "__main__":
-    bits_red = 21       # longitud para entrenar la red
-    bits_sens = 12      # longitud para sensibilidad
+    bits_red = 21
+    bits_sens = 12
 
     lenguajes = [
-        ("L1_todos_ceros",        L1_todos_ceros),
-        ("L2_al_menos_un_1",      L2_al_menos_un_1),
-        ("L3_paridad_impar",      L3_paridad_impar),
-        ("L4_empieza1_termina0",  L4_empieza1_termina0),
-        ("L5_mod3",               L5_mod3),
-        ("L6_acaba_en_1",         L6_acaba_en_1),
-        ("L7_empieza_en_0",       L7_empieza_en_0),
-        ("L8_exactamente_2",      L8_exactamente_2),
-        ("L9_hasta_3_unos",       L9_hasta_3_unos),
-        ("L10_paridad_par",       L10_paridad_par),
-        ("L11_termina_01",        L11_termina_01),
-        ("L12_contiene_101",      L12_contiene_101),
+        ("L1_todos_ceros", L1_todos_ceros),
+        ("L2_al_menos_un_1", L2_al_menos_un_1),
+        ("L3_paridad_impar", L3_paridad_impar),
+        ("L4_empieza1_termina0", L4_empieza1_termina0),
+        ("L5_mod3", L5_mod3),
+        ("L6_acaba_en_1", L6_acaba_en_1),
+        ("L7_empieza_en_0", L7_empieza_en_0),
+        ("L8_exactamente_2", L8_exactamente_2),
+        ("L9_hasta_3_unos", L9_hasta_3_unos),
+        ("L10_paridad_par", L10_paridad_par),
+        ("L11_termina_01", L11_termina_01),
+        ("L12_contiene_101", L12_contiene_101),
     ]
 
     resultados = []
 
     for nombre, f in lenguajes:
-        print(f"=== Entrenando (modelo simple): {nombre} ===")
-        modelo_s = crear_modelo_simple()
-        acc_simple = entrenar_red(
-            modelo_s, f,
-            n_bits=bits_red,
-            n_muestras=200_000,
-            epochs=8
-        )
+        print(f"\n=== {nombre} ===")
 
-        print(f"=== Entrenando (modelo profundo): {nombre} ===")
-        modelo_p = crear_modelo_profundo()
-        acc_profundo = entrenar_red(
-            modelo_p, f,
-            n_bits=bits_red,
-            n_muestras=200_000,
-            epochs=8
-        )
+        acc_lin = entrenar_red(crear_modelo_lineal(), f, bits_red, 200_000, 8)
+        acc_sim = entrenar_red(crear_modelo_simple(), f, bits_red, 200_000, 8)
+        acc_pro = entrenar_red(crear_modelo_profundo(), f, bits_red, 200_000, 8)
+        acc_grd = entrenar_red(crear_modelo_grande(), f, bits_red, 200_000, 8)
 
         sens, var = calcular_sensibilidad(f, bits_sens)
 
         resultados.append({
             "lenguaje": nombre,
-            "acc_simple": acc_simple,
-            "acc_profundo": acc_profundo,
-            "sensibilidad": sens,
-            "varianza": var,
+            "lineal": acc_lin,
+            "simple": acc_sim,
+            "profundo": acc_pro,
+            "grande": acc_grd,
+            "sens": sens,
+            "var": var
         })
 
-    # Mostrar tabla de resultados
+    # TABLA FINAL
     print("\nRESULTADOS:")
-    print("-" * 110)
-    print(f"{'Lenguaje':28} | {'Acc.simple':10} | {'Acc.prof.':10} | {'Sensibilidad':12} | {'Varianza':10}")
-    print("-" * 110)
+    print("-" * 140)
+    print(f"{'Lenguaje':25} | {'Lineal':8} | {'Simple':8} | {'Profundo':8} | {'Grande':8} | {'Sensibilidad':12} | {'Varianza':12}")
+    print("-" * 140)
+
     for r in resultados:
-        print(f"{r['lenguaje']:28} | "
-              f"{r['acc_simple']:.4f}     | "
-              f"{r['acc_profundo']:.4f}     | "
-              f"{r['sensibilidad']:.4f}       | "
-              f"{r['varianza']:.4f}")
-    print("-" * 110)
+        print(f"{r['lenguaje']:25} | "
+              f"{r['lineal']:.4f}   | "
+              f"{r['simple']:.4f}   | "
+              f"{r['profundo']:.4f}   | "
+              f"{r['grande']:.4f}   | "
+              f"{r['sens']:.4f}       | "
+              f"{r['var']:.4f}")
+
+    print("-" * 140)
