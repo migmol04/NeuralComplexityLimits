@@ -70,6 +70,14 @@ def calcular_sensibilidad(funcion, n):
 
 # 3. DEFINICIÓN DE MODELOS NEURONALES
 
+def crear_modelo_profundo():
+    modelo = Sequential([
+        Input(shape=(21,)),
+        Dense(32, activation='relu'),
+        Dense(16, activation='relu'),
+        Dense(1, activation='sigmoid')
+    ])
+    return modelo
 
 def crear_modelo_simple():
     modelo = Sequential([
@@ -199,23 +207,43 @@ if __name__ == "__main__":
     resultados = []
 
     for nombre, f in lenguajes:
-        print(f"=== Entrenando: {nombre} ===")
-        modelo = crear_modelo_simple()
-        accuracy = entrenar_red(modelo, f, n_bits=bits_red, n_muestras=200_000, epochs=8)
+        print(f"=== Entrenando (modelo simple): {nombre} ===")
+        modelo_s = crear_modelo_simple()
+        acc_simple = entrenar_red(
+            modelo_s, f,
+            n_bits=bits_red,
+            n_muestras=200_000,
+            epochs=8
+        )
+
+        print(f"=== Entrenando (modelo profundo): {nombre} ===")
+        modelo_p = crear_modelo_profundo()
+        acc_profundo = entrenar_red(
+            modelo_p, f,
+            n_bits=bits_red,
+            n_muestras=200_000,
+            epochs=8
+        )
+
         sens, var = calcular_sensibilidad(f, bits_sens)
 
         resultados.append({
             "lenguaje": nombre,
-            "accuracy": accuracy,
+            "acc_simple": acc_simple,
+            "acc_profundo": acc_profundo,
             "sensibilidad": sens,
             "varianza": var,
         })
 
     # Mostrar tabla de resultados
     print("\nRESULTADOS:")
-    print("-" * 90)
-    print(f"{'Lenguaje':28} | {'Accuracy':8} | {'Sensibilidad':12} | {'Varianza':10}")
-    print("-" * 90)
+    print("-" * 110)
+    print(f"{'Lenguaje':28} | {'Acc.simple':10} | {'Acc.prof.':10} | {'Sensibilidad':12} | {'Varianza':10}")
+    print("-" * 110)
     for r in resultados:
-        print(f"{r['lenguaje']:28} | {r['accuracy']:.4f}   | {r['sensibilidad']:.4f}       | {r['varianza']:.4f}")
-    print("-" * 90)
+        print(f"{r['lenguaje']:28} | "
+              f"{r['acc_simple']:.4f}     | "
+              f"{r['acc_profundo']:.4f}     | "
+              f"{r['sensibilidad']:.4f}       | "
+              f"{r['varianza']:.4f}")
+    print("-" * 110)
