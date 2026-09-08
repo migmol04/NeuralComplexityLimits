@@ -1,14 +1,4 @@
 import os
-
-# ===========================
-# Recursos: en máquina potente NO limitamos hilos.
-# Si necesitas volver a la versión ligera, descomenta estas líneas.
-# ===========================
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"   # descomentar para forzar CPU
-# os.environ["OMP_NUM_THREADS"] = "1"
-# os.environ["TF_NUM_INTRAOP_THREADS"] = "1"
-# os.environ["TF_NUM_INTEROP_THREADS"] = "1"
-
 import gc
 import random
 import numpy as np
